@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Excercise Info</title>
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/style.css" rel="stylesheet">
+		<script src="js/jquery.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/sql.js"></script>
+		<script src="js/auth.js"></script>
+		<script src="js/exercise_creator.js"></script>
+	</head>
+
+	<body id="index-body">
+		<nav class="navbar navbar-default navbar-static-top">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="index.html">NEXT LEVEL ATHLETES</a>
+				</div>
+				<ul class="nav navbar-nav">
+					<li><a href="exercise.html">Exercises</a></li>
+					<li><a href="scheduling.html">Scheduling</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><button id="logout" type="button" class="btn btn-danger">Log Out</button></li>
+				</ul>
+			</div>
+		</nav>
+		<div class="center-div">
+			<div id="guest" style="padding: 20px;">
+				<h2><strong>Welcome to Exercise Scheduler</strong></h2>
+				<p>Please log in below to change scheduling or click
+					<a href="exercise.html">here</a> to access excercises.<br><br>
+				<small class="text-muted" id="pwd_error"></small></p>
+				<div class="col-md-5">
+					<div class="form-group">
+						<label for="usr">Name:</label>
+						<input type="text" class="form-control" id="usr">
+					</div>
+					<div class="form-group">
+						<label for="pwd">Password:</label>
+						<input type="password" class="form-control" id="pwd">
+					</div>
+					<button id="login" type="button" class="btn" style="background-color:#990000;">Log In</button>
+				</div>
+			</div>
+			<div id="user" class='container'>
+				<div class='row'>
+					<h2><div id="welcome"></div></h2>
+					<p><div id="user-info"></div></p>
+				</div>
+			</div>
+			<div class="push"></div>
+		</div>
+	</body>
+</html>
