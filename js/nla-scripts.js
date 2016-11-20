@@ -10,11 +10,11 @@ var curMuscleRequest;
 /* DRAGGABLE TABLE ROWS */
 /********************************************/
 // redips initialization
-redipsInit = function() {
+function initDrag() {
   // reference to the REDIPS.drag lib
   var rd = REDIPS.drag;
   // initialization
-
+  rd.init();
   // dragged elements can be placed to the empty cells only
   rd.dropMode = 'single';
 
@@ -54,12 +54,6 @@ redipsInit = function() {
 };
 
 
-// add onload event listener
-if (window.addEventListener) {
-  window.addEventListener('load', redipsInit, false);
-} else if (window.attachEvent) {
-  window.attachEvent('onload', redipsInit);
-}
 /********************************************/
 /* JQUERY, DOCUMENT READY */
 /********************************************/
@@ -87,23 +81,24 @@ $(document).ready(function() {
     $('#muscle-choice').selectpicker('refresh');
     $('#delete-button').show();
     init_drag_table_from_db($('#toExerTable'), $(this).val().toLowerCase(), SCHEDULE_TABLE_SIZE, "query_day_info");
-    REDIPS.drag.init();
+    initDrag();
   });
   $('#muscle-choice').on('change', function() {
     init_muscles_from_db($('#fromExerTable'), $(this).val(), "query_muscle_info");
-    REDIPS.drag.init();
+    initDrag();
   });
   $('#reload-button').on('click', function() {
     init_muscles_from_db($('#fromExerTable'), $(this).val(), "query_muscle_info");
-    REDIPS.drag.init();
+    initDrag();
   });
   $('#submit-button').on('click', function() {
     save_to_db();
     alert("Schedule for " + $("#day-choice").val() + " has been saved.");
   });
   $('#delete-button').on('click', function() {
-    confirm("Are you sure you want to delete selected exercises from the schedule?")
-    remove_from_db();
+    if (confirm("Are you sure you want to delete selected exercises from the schedule?")) {
+      remove_from_db();
+    }
   });
 });
 /********************************************/
@@ -131,7 +126,7 @@ function init_muscles_from_db(table, muscles, func) {
     data: {phpfunc: func, muscles: query},
     type:"POST",
     success:function(muscResponse){
-      console.log(muscResponse);
+      //console.log(muscResponse);
       exercises = muscResponse;
     },
     dataType:"json"
@@ -142,7 +137,7 @@ function init_muscles_from_db(table, muscles, func) {
   */
   if (isValid(exercises)) {
     var heading = new Array("Exercise");
-    console.log(exercises);
+    //console.log(exercises);
     createDragTable(exercises, table, heading, false);
   }
 }
@@ -187,8 +182,6 @@ function init_table_from_db(table, day, func) {
     var error = "Your trainer has not created an exercise schedule for today yet."
     $("#error-section").html(error);
     $("#day-table").html("");
-
-
   }
 }
 /*
@@ -223,7 +216,7 @@ function init_drag_table_from_db(table, day, tableSize, func) {
   * Check if object returned from query is valid
   * If valid, schedule for that day is loaded into a table
   */
-  var heading = new Array("Exercise");
+var heading = new Array("Exercise");
   createDragTable(exercises, table, heading, true);
 }
 
@@ -270,10 +263,15 @@ function save_to_db() {
   //Search through rows for exercises
   $('#toExerTable tr').each(function() {
     $(this).find('td').each(function() {
-      var name = $(this).find('.exer_name_row').text();
+      var name = $(this).find('.exer_name').text();
+      var sets = $(this).find('.exer_sets').val();
+      var reps = $(this).find('.exer_reps').val();
+      if (sets == "" || reps == "") {
+        sets = 4;
+        reps = 8;
+      }
       //Send info to server
       if (day == "" || name == "") {
-        console.log("updateSchedule: error with day.");
         return;
       } else {
         console.log("Trying to save exercise: " + name + " into " + day);
@@ -281,7 +279,7 @@ function save_to_db() {
         $.ajax({
           url: '../php/functions.php',
           async: false,
-          data: {phpfunc: "update_schedule", name: name, day: day},
+          data: {phpfunc: "update_schedule", name: name, day: day, sets: sets, reps: reps},
           type:"POST",
           success: function(msg) {
             console.log(msg);
@@ -345,6 +343,7 @@ function createDragTable(queryInfo, table, header, hasChecks) {
     var tr = document.createElement('TR');
     var td = document.createElement('TD');
     var div = document.createElement('DIV');
+    var innerdiv = document.createElement('DIV');
     var redips = document.createElement('SPAN');
     var check = document.createElement('SPAN');
     var sets = document.createElement('SPAN');
@@ -354,12 +353,20 @@ function createDragTable(queryInfo, table, header, hasChecks) {
     //Only add DRAGGABLE row if it contains information
     if (queryInfo[row] != "") {
       check.innerHTML = '<label class="checkbox-inline"><input type="checkbox" value="">&nbsp;</label>';
+      sets.innerHTML =  '<label class="checkbox-inline">Sets:&nbsp;<input onkeypress="validate(event)" class="exer_sets" type="text" value=""></label>';
+      reps.innerHTML =  '<label class="checkbox-inline">Reps:&nbsp;<input onkeypress="validate(event)" class="exer_reps" type="text" value=""></label>';
       redips.innerHTML = queryInfo[row];
 
-      redips.className = "exer_name_row";
-      div.className = "redips-drag darkRed";
+      innerdiv.className = "exer_details";
+      div.className = "redips-drag exer_row style-4";
+      redips.className = "exer_name";
 
-      if (hasChecks) {div.appendChild(check)};
+      if (hasChecks) {
+        div.appendChild(check);
+      }
+      innerdiv.appendChild(sets);
+      innerdiv.appendChild(reps);
+      div.appendChild(innerdiv);
       div.appendChild(redips);
       td.appendChild(div);
     }
@@ -368,43 +375,7 @@ function createDragTable(queryInfo, table, header, hasChecks) {
   }
   table.html(tableBody);
 }
-function updateInfoPane (exer_name) {
-  var titleDiv = $('#title');
-  var subInfo = $('#subtitle');
-  var descripDiv = $('#info-explanation');
-  /* CONNECT TO DATABASE */
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', 'TrackerPro.db', true);
-  xhr.responseType = 'arraybuffer';
-  xhr.onload = function(e) {
-    var uInt8Array = new Uint8Array(this.response);
-    db = new SQL.Database(uInt8Array);
-    var req = "SELECT name, sets, reps, link, description FROM exercises WHERE name='" + exer_name +"'";
-    var exercises = db.exec(req);
-    if (isValid(exercises)) {
-      var exer = exercises[0].values;
-      /* Setting title and description */
-      $('#title').html("<h3>" + exer[0][0] + " <small class=\"text-muted\"> Sets: " + exer[0][1] + " Reps: " + exer[0][2] + "</small></h3>");
-      $('#info-explanation').html("<p><strong>Steps: </strong>" + exer[0][4] + "</p>");
-      /* Creating Video and Setting URL*/
-      var vidHTML = "<div class=\"youtube-player\" data-id=" + exer[0][3] + "\"></div>";
-      $('#info-section').find('div:first').remove();
-      $('#info-section').prepend(vidHTML);
-      var div, n, v = document.getElementsByClassName("youtube-player");
-      for (n = 0; n < v.length; n++) {
-        div = document.createElement("div");
-        div.setAttribute("data-id", v[n].dataset.id);
-        div.innerHTML = labnolThumb(v[n].dataset.id);
-        div.onclick = labnolIframe;
-        v[n].appendChild(div);
-      }
-      //Handle error if exercise cannot be found
-    } else {
-      console.error("Couldnt find exercise with name: " + exer_name);
-    }
-  };
-  xhr.send();
-}
+
 
 /**********************************************/
 /*               HELPER SCRIPTS                 */
@@ -412,6 +383,17 @@ function updateInfoPane (exer_name) {
 //Checks if an array is valid and has information
 function isValid(array) {
   return array != null && typeof array !== 'undefined' && array.length > 0;
+}
+/*allows only numbers to be entered into text field*/
+function validate(evt) {
+  var theEvent = evt || window.event;
+  var key = theEvent.keyCode || theEvent.which;
+  key = String.fromCharCode( key );
+  var regex = /[0-9]|\./;
+  if( !regex.test(key) ) {
+    theEvent.returnValue = false;
+    if(theEvent.preventDefault) theEvent.preventDefault();
+  }
 }
 /**********************************************/
 /*               DATE SCRIPTS                 */

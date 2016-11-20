@@ -6,7 +6,6 @@
 }
 html, body {
     font-family: 'Lato', sans-serif;
-    word-spacing: 5px;
     padding: 0;
     margin: 0;
     height: 100%;
@@ -14,13 +13,47 @@ html, body {
     background-color: var(--darkGrey);
     background-size: cover;
 }
+h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+td {
+  background-color: var(--darGrey);
+}
 #index-body {
-  background-image: url("../res/exercise-bg.jpg");
+  background-image: url("../res/welcome-bg.jpg");
 }
 #exercise-body {
   background-image: url("../res/exercise-bg.jpg");
 }
+#rightTable {
+  overflow: auto;
+  height: 32.5em;
+  position: relative;
+}
+#leftTable {
+ overflow: auto;
+ height: 25em;
+ position: relative;
+}
 
+.exer_row input, .exer_row input {
+  width: 3em;
+  height: 2em;
+  font-size: .5em;
+  color: white;
+  text-align: center;
+  background-color: var(--darkGrey);
+}
+.exer_row {
+  border-width: 0px !important;
+  min-height: 50px;
+  padding: 0;
+  margin: 0;
+}
+.exer_details {
+  float: right;
+}
 .row-centered {
     text-align:center;
 }
@@ -37,13 +70,36 @@ html, body {
     width:320px;
 }
 
-input {
-  color:black;
+input[type="text"], input[type="password"] {
+  background-color: rgba(0, 0, 0, 0);
+  font-size: 18px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  -webkit-border-radius: none;
+  -moz-border-radius: none;
+  -ms-border-radius: none;
+  -o-border-radius: none;
+  border-radius: none;
 }
-.login {
-    border: 1px solid var(--darkRed);
-    background-color: rgba(30, 30, 30, 0.6);
-    border-radius: 10px; /* for vertical scrolling */
+input[type="text"]:focus, input[type="password"]:focus {
+  outline: none;
+}
+.style-4 input[type="text"], .style-4 input[type="password"] {
+  padding: 10px;
+  border: none;
+  border-bottom: solid 2px var(--darkRed);
+  -webkit-transition: border 0.3s;
+  -moz-transition: border 0.3s;
+  -o-transition: border 0.3s;
+  transition: border 0.3s;
+}
+
+.login-centered{
+    padding-top: 15vh;
 }
 .btn-center, #logout {
     margin-top: 25%;
@@ -61,9 +117,45 @@ hr {
   border-color: var(--darkRed);
 
 }
+
 #info-explanation {
   max-height: 25vh;
   overflow: scroll;
+}
+#guest {
+  text-align: center;
+  background-color: rgba(30, 30, 30, 0.6);
+  padding: 20px;
+  border-radius: 5px;
+}
+.login-but {
+  color: white;
+  width: 100px;
+  background-color: var(--darkGrey);
+  border-color: var(--darkRed);
+}
+.login-but:hover {
+  color: white;
+  background-color: var(--grey);
+  border-color: yellow;
+}
+.login-but:active {
+  background-color: var(--medDarkGrey);
+}
+a {
+    color: white;
+    text-decoration: none;
+}
+
+a:hover {
+     color:white;
+     text-decoration:none;
+     cursor:pointer;
+}
+th {
+  background-color: #1E1E1E;
+  color: #8C8C8C;
+  font-size: 18px;
 }
 
 li {
@@ -122,11 +214,6 @@ div#redips-drag td {
   text-align: left;
   background-color: #1E1E1E;
   border-bottom: 1px solid var(--grey);
-}
-th {
-  background-color: #1E1E1E;
-  color: #8C8C8C;
-  font-size: 18px;
 }
 #schedule-table td:hover, #day-table td:hover {
   background-color: #333333; color: #fff;

@@ -1,5 +1,5 @@
 <?php
-//ini_set('display_errors', 1);
+ini_set('display_errors', 1);
 /*Test if the action being called by the method in scheduling.js
 *is corresponding to a method. Then procede to call a method.
 *If confused why you did this: http://stackoverflow.com/questions/
@@ -31,7 +31,9 @@ if (isset($_POST['phpfunc'])) {
     case "update_schedule":
         $name = strval($_POST['name']);
         $day = strval($_POST['day'])."List";
-        update_schedule($day, $name);
+        $sets = strval($_POST['sets']);
+        $reps = strval($_POST['reps']);
+        update_schedule($day, $name, $sets, $reps);
         break;
     default:
       echo "error in switch";
@@ -44,9 +46,13 @@ function clear_column($day) {
   $result = mysqli_query($conn, $query);
   echo "Success clearing column for $day.";
 }
-function update_schedule($day, $name) {
+function update_schedule($day, $name, $sets, $reps) {
   include 'db_connect.php';
+
   $query = "INSERT INTO $day (exer_name) VALUES ('$name')";
+  $result = mysqli_query($conn, $query);
+
+  $query = "UPDATE exercises SET sets='$sets', reps='$reps' WHERE name='$name'";
   $result = mysqli_query($conn, $query);
   echo $query;
 }
@@ -56,12 +62,10 @@ function show_userbox() {
     $u = $_SESSION['username'];
     $uid = $_SESSION['id'];
 // display the user box
-    echo "<div id='userbox'>
-    Welcome $u
-    <ul>
-        <li><a href='php/logout.php'>Logout</a></li>
-    </ul>
-</div>";
+    echo "<div style='text-align:left;' id='userbox'>
+    Welcome $u, head over to the exercises page to view your daily workout or schedule a workout!<br><br>
+    </div>
+    <button class='btn login-but'><a href='php/logout.php'>Logout</a></button>";
 
 }
 function query_day_info($day) {
@@ -107,7 +111,7 @@ function query_exer_info($exer_name) {
       $dscrpt = $row['description'];
       $vid_id = $row['video_id'];
       echo "<div class='panel-heading'>
-              <h2 class='panel-title' id='title'> $name
+              <h2 id='title'> $name
               <small id='subtitle' class='text-muted'>Sets: $sets Reps: $reps </small>
               </h2>
             </div>

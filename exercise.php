@@ -33,17 +33,16 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li>
-            <a><span id="day-of-week" class="center-in-navbar"></span>
+              <span id="day-of-week" class="center-in-navbar"></span>
               <span id="decDayBut" class="center-in-navbar glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
               <span id="incDayBut" class="center-in-navbar glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-            </a>
           </li>
         </ul>
       </div>
     </div>
   </nav>
   <div class="row row-fluid">
-    <div id="table-container" class="col-sm-3" style="padding-left: 30px;">
+    <div id="table-container" class="col-sm-3">
       <div style="max-height:75vh;overflow:auto;">
         <table class="table table-hover" id="day-table">
           <tbody id="day-table-body"> </tbody>
@@ -75,11 +74,11 @@
   });
   function labnolThumb(id) {
     console.log(id)
-    var thumb = "<img src=\"https:\/\/i.ytimg.com/vi/ID/hqdefault.jpg\"><noscript><img src=\"https:\/\/i.ytimg.com/vi/ID/hqdefault.jpg\"></noscript>";
+    var thumb = "<img src=\"http:\/\/img.youtube.com/vi/ID/0.jpg\"><noscript><img src=\"http:\/\/img.youtube.com/vi/ID/0.jpg\"></noscript>";
     var play = '<div class="play"></div>';
-    return thumb.replace("ID", id.substring(0,id.length-1)) + play;
+    return thumb.replace("ID", id.substring(0,id.length)) + play;
   }
-  function labnolIframe() {
+function labnolIframe() {
     var iframe = document.createElement("iframe");
     iframe.setAttribute("src", "https://www.youtube.com/embed/" + this.dataset.id + "?autoplay=1");
     iframe.setAttribute("frameborder", "0");

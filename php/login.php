@@ -1,11 +1,7 @@
 <?php
-
-if (!isset($_SESSION['id']) || !isset($_SESSION['username']))
-{
-
+if (!isset($_SESSION['id']) || !isset($_SESSION['username'])) {
 	// user is not logged in.
-    if (isset($_POST['cmdlogin']))
-    {
+    if (isset($_POST['cmdlogin'])) {
         // retrieve the username and password sent from login form
         // First we remove all HTML-tags and PHP-tags, then we create a md5-hash
         // This step will make sure the script is not vurnable to sql injections.
@@ -19,8 +15,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['username']))
         // If the database returns a 1 as result we know  the login was correct and we proceed.
         // If the database returns a result > 1 there are multple users
         // with the same username and password, so the login will fail.
-        if (mysqli_num_rows($result) != 1)
-        {
+        if (mysqli_num_rows($result) != 1) {
             // invalid login information
             echo "Wrong username or password!";
             //show the loginform again.
@@ -40,7 +35,7 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['username']))
     	 // so we show him the loginform
         include "loginform.php";
     }
- 
+
 } else {
 	 // The user is already loggedin, so we show the userbox.
     show_userbox();

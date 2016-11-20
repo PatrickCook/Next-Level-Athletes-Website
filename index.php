@@ -29,22 +29,26 @@ require_once ("php/functions.php");
         </button>
 				<a class="navbar-brand" href="index.php">NEXT LEVEL ATHLETES</a>
 			</div>
-			<div class="collapse navbar-collapse" id="navbar-collapse">
-				<ul class="nav navbar-nav">
-					<li><a href="exercise.php">Exercises</a></li>
-					<li><a href="scheduling.php">Scheduling</a></li>
-				</ul>
-		 </div>
+			<?php
+			if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
+				echo '<div class="collapse navbar-collapse" id="navbar-collapse">
+					<ul class="nav navbar-nav">
+						<li><a href="exercise.php">Exercises</a></li>
+						<li><a href="scheduling.php">Scheduling</a></li>
+					</ul>
+			 </div>';
+			}
+			?>
+
 		</div>
 	</nav>
 	<div class="container">
 		<div class="row row-centered">
-			<div class="col-sm-6 col-centered login">
-				<div id="guest" style="padding:20px;">
+			<div class="col-sm-6 col-centered login-centered">
+				<div id="guest" class="darkRed">
 					<div>
-						<h2><strong>Welcome to Exercise Scheduler</strong></h2>
-						<p>Please log in below to change scheduling or click
-							<a href="exercise.php">here</a> to access excercises.<br><br>
+						<h2>Welcome to the NLA Workout Helper</h2>
+						
 						</div>
 						<?php
 						include "php/login.php";

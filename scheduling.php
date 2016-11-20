@@ -9,11 +9,13 @@
       <link href="css/bootstrap.min.css" rel="stylesheet">
       <link href="css/style.css" rel="stylesheet">
       <link href="css/bootstrap-select.css" rel="stylesheet">
+
       <script src="js/jquery.min.js"></script>
       <script src="js/bootstrap.js"></script>
       <script src="js/nla-scripts.js"></script>
       <script src="js/bootstrap-select.js"></script>
       <script src="js/redips-drag-min.js"></script>
+
    </head>
    <body>
       <nav class="navbar navbar-default navbar-static-top">
@@ -39,7 +41,7 @@
          </div>
       </nav>
       <div class="container" id="redips-drag">
-         <div class="col-sm-6" style="max-height: 70vh;">
+         <div class="col-sm-6">
             <div class="panel panel-default">
                <div class="panel-heading">
                   <h3 class="panel-title">Create a workout:</h3>
@@ -49,7 +51,7 @@
                      <div class="form-group">
                         <label class="control-label" for="lunch">Day:</label>
                      </div>
-                     <div class="form-group">
+                     <div style="padding-left:4.7em;"class="form-group">
                         <select id="day-choice" data-width="100%" class="selectpicker" title="Select day...">
                            <option>Monday</option>
                            <option>Tuesday</option>
@@ -60,22 +62,26 @@
                            <option>Sunday</option>
                         </select>
                      </div>
+                     <br>
                      <div class="form-group">
-                        <label class="control-label" for="lunch">Muscle Group:</label>
+                        <label class="control-label" for="lunch">Muscle Group:&nbsp</label>
                      </div>
                      <div class="form-group">
-                        <select id="muscle-choice" data-width="100%" class="selectpicker" multiple data-max-options="4" title="Select muscle group..." disabled="true">
+                        <select id="muscle-choice" data-width="100%" class="selectpicker" multiple data-max-options="2" title="Select muscle group..." disabled="true">
                            <option>Abs</option>
                            <option>Back</option>
                            <option>Biceps</option>
+                           <option>Cardio</option>
                            <option>Chest</option>
                            <option>Legs</option>
                            <option>Shoulders</option>
                            <option>Triceps</option>
+                           <option>Traps</option>
                         </select>
                      </div>
+                     <small>(can select more than 1)</small>
                   </form>
-                  <div style="max-height:60vh;overflow:auto;">
+                  <div class='table-responsive' id='leftTable'>
                      <table class="table table-hover" id="fromExerTable">
                      </table>
                   </div>
@@ -84,12 +90,12 @@
                Reload</button>
             </div>
          </div>
-         <div class="col-sm-6" style="max-height:70vh;">
+         <div class="col-sm-6">
             <div class="panel panel-default">
                <div class="panel-heading">
                   <h3 class="panel-title">Add exercises to schedule:</h3>
                </div>
-               <div class="panel-body" style="height:60vh;overflow:auto;">
+               <div id='rightTable' class="panel-body">
                   <table class="table table-hover" id="toExerTable">
                   </table>
                </div>
