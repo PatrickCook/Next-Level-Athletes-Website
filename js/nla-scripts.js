@@ -63,24 +63,24 @@ $(document).ready(function() {
   d = new Date();
   currentDay = d.getDay();
   $('#delete-button').hide();
-  init_table_from_db($('#day-table'), toStringDate(currentDay).toLowerCase(), "query_day_info");
+  init_table_from_db($('#day-table'), toStringDate(currentDay), "query_day_info");
   /* Day buttons on Exercise.php page */
   $('#incDayBut').on('click',function() {
     currentDay++;
     wrap_around_day();
-    init_table_from_db($('#day-table'), toStringDate(currentDay).toLowerCase(), "query_day_info");
+    init_table_from_db($('#day-table'), toStringDate(currentDay), "query_day_info");
   });
   $('#decDayBut').on('click',function() {
     currentDay--;
     wrap_around_day();
-    init_table_from_db($('#day-table'), toStringDate(currentDay).toLowerCase(),"query_day_info");
+    init_table_from_db($('#day-table'), toStringDate(currentDay),"query_day_info");
   });
   /* Scheduling page buttons */
   $("#day-choice").on('change', function() {
     $('#muscle-choice').prop('disabled', false);
     $('#muscle-choice').selectpicker('refresh');
     $('#delete-button').show();
-    init_drag_table_from_db($('#toExerTable'), $(this).val().toLowerCase(), SCHEDULE_TABLE_SIZE, "query_day_info");
+    init_drag_table_from_db($('#toExerTable'), $(this).val(), SCHEDULE_TABLE_SIZE, "query_schedule");
     initDrag();
   });
   $('#muscle-choice').on('change', function() {
@@ -114,7 +114,7 @@ function init_muscles_from_db(table, muscles, func) {
     if (add > 0 && add < muscles.length) {
       query += " OR ";
     }
-    query += "body_part='" + muscles[add].toLowerCase() + "'";
+    query += "ExerciseMuscle='" + muscles[add] + "'";
   }
   /*Getting info from database for table update */
   // Update day shown
@@ -167,11 +167,11 @@ function init_table_from_db(table, day, func) {
   * If valid, schedule for that day is loaded into a table
   */
   if (isValid(exercises)) {
-
     /* Setting up arrays and functions for building the table */
-    var heading = new Array("Exercise");
-    var onmouseover = function(e) {query_exer_info($(this).find('td').text());}
+    var heading = new Array("Exercise", "Sets", "Reps");
+    var onmouseover = function(e) {query_exer_info($(this).text());}
     createTable(exercises, table, heading, onmouseover);
+    query_exer_info(exercises[0][0]);
     $("#error-section").html("");
     //update info pane with first exercise returned
     //updateInfoPane(exercises);
@@ -181,6 +181,7 @@ function init_table_from_db(table, day, func) {
   } else {
     var error = "Your trainer has not created an exercise schedule for today yet."
     $("#error-section").html(error);
+    $('#info-container').html("");
     $("#day-table").html("");
   }
 }
@@ -209,6 +210,7 @@ function init_drag_table_from_db(table, day, tableSize, func) {
       } else {
         console.debug("Day schedule empty.");
       }
+
     },
     dataType:"json"
   });
@@ -216,7 +218,7 @@ function init_drag_table_from_db(table, day, tableSize, func) {
   * Check if object returned from query is valid
   * If valid, schedule for that day is loaded into a table
   */
-var heading = new Array("Exercise");
+  var heading = new Array("Exercise");
   createDragTable(exercises, table, heading, true);
 }
 
@@ -235,21 +237,13 @@ function query_exer_info(exer_name) {
     },
   });
 
-  var div, n, v = document.getElementsByClassName("youtube-player");
-  for (n = 0; n < v.length; n++) {
-    div = document.createElement("div");
-    div.setAttribute("data-id", v[n].dataset.id);
-    div.innerHTML = labnolThumb(v[n].dataset.id);
-    div.onclick = labnolIframe;
-    v[n].appendChild(div);
-  }
-
 }
 /*
 * Saves the schedule to the database
 */
 function save_to_db() {
-  var day = $('#day-choice').val().toLowerCase();
+  var day = $('#day-choice').val();
+  var schedule = new Array();
   //Clear column
   $.ajax({
     url: '../php/functions.php',
@@ -260,33 +254,31 @@ function save_to_db() {
       console.log(msg);
     }
   });
+
   //Search through rows for exercises
   $('#toExerTable tr').each(function() {
     $(this).find('td').each(function() {
       var name = $(this).find('.exer_name').text();
       var sets = $(this).find('.exer_sets').val();
       var reps = $(this).find('.exer_reps').val();
-      if (sets == "" || reps == "") {
-        sets = 4;
-        reps = 8;
-      }
       //Send info to server
-      if (day == "" || name == "") {
-        return;
-      } else {
-        console.log("Trying to save exercise: " + name + " into " + day);
-        //Save Schedule
-        $.ajax({
-          url: '../php/functions.php',
-          async: false,
-          data: {phpfunc: "update_schedule", name: name, day: day, sets: sets, reps: reps},
-          type:"POST",
-          success: function(msg) {
-            console.log(msg);
-          }
-        });
+      if (name != "") {
+        schedule.push([name,sets, reps]);
       }
     });
+  });
+
+  console.log("Trying to save exercise: " + name + " into " + day);
+  //Save Schedule
+   scheduleString = JSON.stringify(schedule);
+  $.ajax({
+    url: '../php/functions.php',
+    async: false,
+    data: {phpfunc: "update_schedule",day: day, schedule: scheduleString},
+    type:"POST",
+    success: function(msg) {
+      console.log(msg);
+    }
   });
 }
 function remove_from_db() {
@@ -317,11 +309,15 @@ function createTable(queryInfo, table, header, onmouseover) {
   //Create Rows
   for (var row = 0; row < queryInfo.length; row++) {
     var tr = document.createElement('TR');
-    tr.onmouseover = onmouseover;
-    var td = document.createElement('TD')
-    var div = document.createElement('DIV')
-    td.appendChild(document.createTextNode(queryInfo[row]));
-    tr.appendChild(td)
+    var queryEntry = queryInfo[row];
+    for (var col = 0; col < queryEntry.length; col++) {
+      var td = document.createElement('TD')
+      var div = document.createElement('DIV')
+
+      if (col == 0) td.onmouseover = onmouseover;
+      td.appendChild(document.createTextNode(queryEntry[col]));
+      tr.appendChild(td)
+    }
     tableBody.appendChild(tr);
   }
   table.append(tableBody);
@@ -353,12 +349,12 @@ function createDragTable(queryInfo, table, header, hasChecks) {
     //Only add DRAGGABLE row if it contains information
     if (queryInfo[row] != "") {
       check.innerHTML = '<label class="checkbox-inline"><input type="checkbox" value="">&nbsp;</label>';
-      sets.innerHTML =  '<label class="checkbox-inline">Sets:&nbsp;<input onkeypress="validate(event)" class="exer_sets" type="text" value=""></label>';
-      reps.innerHTML =  '<label class="checkbox-inline">Reps:&nbsp;<input onkeypress="validate(event)" class="exer_reps" type="text" value=""></label>';
-      redips.innerHTML = queryInfo[row];
+      sets.innerHTML =  '<label class="checkbox-inline">Sets:&nbsp;<input onkeypress="validate(event)" class="exer_sets" type="text" value="' + queryInfo[row][1] +'"></label>';
+      reps.innerHTML =  '<label class="checkbox-inline">Reps:&nbsp;<input onkeypress="validate(event)" class="exer_reps" type="text" value="' + queryInfo[row][2] +'"></label>';
+      redips.innerHTML = queryInfo[row][0];
 
       innerdiv.className = "exer_details";
-      div.className = "redips-drag exer_row style-4";
+      div.className = "redips-drag exer_row";
       redips.className = "exer_name";
 
       if (hasChecks) {
@@ -399,7 +395,7 @@ function validate(evt) {
 /*               DATE SCRIPTS                 */
 /**********************************************/
 function dayToListId(day) {
-  return day.toLowerCase() + "List";
+  return day + "List";
 }
 function wrap_around_day() {
   if (currentDay < 0) currentDay = 6;

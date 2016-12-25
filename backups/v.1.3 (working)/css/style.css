@@ -1,0 +1,355 @@
+:root {
+  --darkGrey: #1A1A1A;
+  --medDarkGrey: #1E1E1E;
+  --grey: #282828;
+  --darkRed: #990000;
+}
+html, body {
+    font-family: 'Lato', sans-serif;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    color: white;
+    background-color: var(--darkGrey);
+    background-size: cover;
+}
+h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+td {
+  background-color: var(--darGrey);
+}
+#index-body {
+  background-image: url("../res/welcome-bg.jpg");
+}
+#exercise-body {
+  background-image: url("../res/exercise-bg.jpg");
+}
+#rightTable {
+  overflow: auto;
+  height: 32.5em;
+  position: relative;
+}
+#leftTable {
+ overflow: auto;
+ height: 25em;
+ position: relative;
+}
+
+.exer_row input, .exer_row input {
+  width: 3em;
+  height: 2em;
+  font-size: .5em;
+  color: white;
+  text-align: center;
+  background-color: var(--darkGrey);
+}
+.exer_row {
+  border-width: 0px !important;
+  min-height: 50px;
+  padding: 0;
+  margin: 0;
+}
+.exer_details {
+  float: right;
+}
+.row-centered {
+    text-align:center;
+}
+.col-centered {
+    display:inline-block;
+    float:none;
+    /* reset the text-align */
+    text-align:left;
+    /* inline-block space fix */
+    margin-right:-4px;
+}
+.col-fixed {
+    /* custom width */
+    width:320px;
+}
+.panel-heading h3{
+  font-weight: 200;
+}
+input[type="text"], input[type="password"] {
+  background-color: rgba(0, 0, 0, 0);
+  font-size: 18px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  -webkit-border-radius: none;
+  -moz-border-radius: none;
+  -ms-border-radius: none;
+  -o-border-radius: none;
+  border-radius: none;
+}
+input[type="text"]:focus, input[type="password"]:focus {
+  outline: none;
+}
+.style-4 input[type="text"], .style-4 input[type="password"] {
+  padding: 10px;
+  border: none;
+  border-bottom: solid 2px var(--darkRed);
+  -webkit-transition: border 0.3s;
+  -moz-transition: border 0.3s;
+  -o-transition: border 0.3s;
+  transition: border 0.3s;
+}
+
+.login-centered{
+    padding-top: 15vh;
+}
+.btn-center, #logout {
+    margin-top: 25%;
+}
+.center-in-navbar {
+  line-height: 50px;
+}
+
+hr {
+    border-color: #ccc;
+}
+.panel {
+  background-color: var(--grey);
+  font-size: 16px;
+  border-color: var(--darkRed);
+
+}
+
+#info-explanation {
+  max-height: 25vh;
+  overflow: scroll;
+}
+#guest {
+  text-align: center;
+  background-color: rgba(30, 30, 30, 0.6);
+  padding: 20px;
+  border-radius: 5px;
+}
+.login-but {
+  color: white;
+  width: 100px;
+  background-color: var(--darkGrey);
+  border-color: var(--darkRed);
+}
+.login-but:hover {
+  color: white;
+  background-color: var(--grey);
+  border-color: yellow;
+}
+.login-but:active {
+  background-color: var(--medDarkGrey);
+}
+a {
+    color: white;
+    text-decoration: none;
+}
+
+a:hover {
+     color:white;
+     text-decoration:none;
+     cursor:pointer;
+}
+th {
+  background-color: #1E1E1E;
+  color: #8C8C8C;
+  font-size: 18px;
+}
+
+li {
+  margin: 0 9px 0 0;
+  padding: 0 9px 0 0;
+}
+
+li:last-child {
+  border-right: none;
+}
+
+/********************************************/
+          /* DRAGGABLE TABLES */
+/********************************************/
+/* drag container (contains two tables) */
+#redips-drag {
+  margin: auto;
+}
+/* drag objects (DIV inside table cells) */
+.redips-drag {
+  position: relative;
+  cursor: move;
+  z-index: 10;
+  background-color: var(--darkGrey);
+  text-align: left;
+  padding: 4px;
+  font-size: 18px;
+
+}
+/* tables */
+div#redips-drag table {
+  background-color: #e0e0e0;
+  border-collapse: collapse;
+}
+
+
+div#redips-drag td {
+  height: 50px;
+  border: 1px solid #ccc;
+  text-align: center;
+  font-size: 12px;
+  padding: 5px;
+}
+.darkRed {
+  border-radius: 2px;
+  border: 1px solid var(--darkRed);
+}
+#schedule-table {
+  height: 100vh;
+}
+#schedule-table, #day-table {
+  border-collapse: collapse;
+}
+ #schedule-table tr, div#redips-drag td, #day-table td {
+  font-size: 20px;
+  text-align: left;
+  background-color: #1E1E1E;
+  border-bottom: 1px solid var(--grey);
+}
+#schedule-table td:hover, #day-table td:hover {
+  background-color: #333333; color: #fff;
+}
+
+
+/********************************************/
+          /* NAV BAR CSS SECTION */
+/********************************************/
+.navbar-default {
+  background-color: var(--darkGrey);
+  border-color: var(--darkRed);
+}
+.navbar-default .navbar-brand {
+  color: #ffffff;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  color: #ffffff;
+}
+.navbar-default .navbar-text {
+  color: #fff;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #fff;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+  color: #ffffff;
+  background-color: var(--darkRed);
+}
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+  color: #ffffff;
+  background-color: var(--darkRed);
+}
+.navbar-default .navbar-toggle {
+  border-color: var(--darkRed);
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+  background-color: var(--darkRed);
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #cad2c5;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: #cad2c5;
+}
+.navbar-default .navbar-link {
+  color: #cad2c5;
+}
+.navbar-default .navbar-link:hover {
+  color: #ffffff;
+}
+
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #cad2c5;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #ffffff;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #ffffff;
+    background-color: var(--darkRed);
+  }
+}
+
+/********************************************/
+          /* YOUTUBE PLAYER SECTION */
+/********************************************/
+
+.youtube-player {
+    position: relative;
+    padding-bottom: 56.23%;
+    /* Use 75% for 4:3 videos */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    background: #000;
+    margin: 5px;
+}
+
+.youtube-player iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    background: transparent;
+}
+
+.youtube-player img {
+    bottom: 0;
+    display: block;
+    left: 0;
+    margin: auto;
+    max-width: 100%;
+    width: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    border: none;
+    height: auto;
+    cursor: pointer;
+    -webkit-transition: .4s all;
+    -moz-transition: .4s all;
+    transition: .4s all;
+}
+
+.youtube-player img:hover {
+    -webkit-filter: brightness(75%);
+}
+
+.youtube-player .play {
+    height: 72px;
+    width: 72px;
+    left: 50%;
+    top: 50%;
+    margin-left: -36px;
+    margin-top: -36px;
+    position: absolute;
+    background: url("//i.imgur.com/TxzC70f.png") no-repeat;
+    cursor: pointer;
+}
